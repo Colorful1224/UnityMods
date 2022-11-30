@@ -1,0 +1,15 @@
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\EasyHarvest.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\EasyHarvest.pdb
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\0Harmony12.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\Assembly-CSharp.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\UnityEngine.CoreModule.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\UnityEngine.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\UnityEngine.IMGUIModule.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\UnityEngine.UI.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Debug\UnityModManager.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Debug\EasyHarvest.csproj.AssemblyReference.cache
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Debug\EasyHarvest.csproj.CoreCompileInputs.cache
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Debug\EasyHarvest.csproj.CopyComplete
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Debug\EasyHarvest.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Debug\EasyHarvest.pdb

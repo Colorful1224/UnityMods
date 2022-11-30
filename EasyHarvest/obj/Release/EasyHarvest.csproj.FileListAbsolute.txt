@@ -1,0 +1,8 @@
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Release\EasyHarvest.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Release\EasyHarvest.pdb
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\bin\Release\UnityModManager.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Release\EasyHarvest.csproj.AssemblyReference.cache
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Release\EasyHarvest.csproj.CoreCompileInputs.cache
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Release\EasyHarvest.csproj.CopyComplete
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Release\EasyHarvest.dll
+C:\Users\a1192\source\repos\EasyHarvest\EasyHarvest\obj\Release\EasyHarvest.pdb
