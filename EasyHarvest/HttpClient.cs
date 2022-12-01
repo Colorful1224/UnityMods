@@ -23,7 +23,7 @@ namespace EasyHarvest
                 HttpWebRequest wbRequest = (HttpWebRequest)WebRequest.Create(url);
                 wbRequest.Proxy = null;
                 wbRequest.Method = "GET";
-                wbRequest.Timeout = 200;
+                wbRequest.Timeout = 5000;
                 HttpWebResponse wbResponse = (HttpWebResponse)wbRequest.GetResponse();
                 using (Stream responseStream = wbResponse.GetResponseStream())
                 {
@@ -60,7 +60,7 @@ namespace EasyHarvest
                 wbRequest.Method = "POST";
                 wbRequest.ContentType = "application/json";
                 wbRequest.ContentLength = data.Length;
-                wbRequest.Timeout = 200;
+                wbRequest.Timeout = 5000;
 
                 using (Stream wStream = wbRequest.GetRequestStream())
                 {

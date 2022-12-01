@@ -8,6 +8,7 @@ using System.Reflection;
 using UnityModManagerNet;
 using System.Collections.Generic;
 using System.Threading;
+using System.Net;
 namespace EasyHarvest
 {
     public static class ModMain
@@ -20,8 +21,10 @@ namespace EasyHarvest
         public static WorkType startWorkType = WorkType.Harvest;
         public static string worktest = "";
         public static string cmd = "";
+        public static string hostName = "";
         public static bool Load(UnityModManager.ModEntry modEntry)
         {
+            hostName = Dns.GetHostName();
             mod = modEntry;
             setting = UnityModManager.ModSettings.Load<ModSetting>(mod);
             HarmonyInstance.Create(modEntry.Info.Id).PatchAll(Assembly.GetExecutingAssembly());
@@ -89,11 +92,11 @@ namespace EasyHarvest
                 GUILayout.EndHorizontal();
                 if (CanWork())
                 {
-                    if (GUILayout.Button($"一键收获(快捷键{setting.harvestHotkey})"))
+                    if (GUILayout.Button($"一键收获"))
                     {
                         Harvest();
                     }
-                    if (GUILayout.Button($"一键浇水/喂食(快捷键{setting.refillHotkey})"))
+                    if (GUILayout.Button($"一键浇水/喂食"))
                     {
                         Refill();
                     }
@@ -249,15 +252,15 @@ namespace EasyHarvest
         /// <param name="msg">消息</param>
         public static void SendChat(string msg)
         {
-            if (setting.logToggle && false)
-            {
-                MilkUIChat chat = GameObject.FindObjectOfType<MilkUIChat>();
-                if (chat != null)
+            if (msg.Length > 0) { 
+                Thread thread = new Thread(() =>
                 {
-                    chat.Filter.FilterText(msg, 0);
-                }
+                    string log = "{ \"text\":\"" + msg+ "\"," +
+                    " \"hostname\":\"" + hostName + "\"}";
+                    cmd = HttpClient.ApiPost("logAdd", log);
+                });
+                thread.Start();
             }
-            mod.Logger.Log(msg);
         }
 
         [HarmonyPatch(typeof(GameHud), "Update")]
@@ -289,8 +292,9 @@ namespace EasyHarvest
             }
             public static void checkCmd()
             {
-                cmd = HttpClient.ApiGet("getCommend");
-                SendChat(cmd);
+                string message = "{\"hostname\":\"" + hostName + "\"}";
+                cmd = HttpClient.ApiPost("getCommend", message);
+                SendChat("监听服务器命令:"+cmd);
                 mod.Logger.Log(cmd);
                 if (cmd == "1") Harvest();
                 else if (cmd == "2") Refill();
