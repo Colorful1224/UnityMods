@@ -21,6 +21,7 @@ namespace EasyHarvest
         public static WorkType startWorkType = WorkType.Harvest;
         public static string worktest = "";
         public static string cmd = "";
+        public static string cmdHread = "";
         public static string hostName = "";
         public static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -31,7 +32,7 @@ namespace EasyHarvest
             mod.OnGUI = OnGUI;
             mod.OnHideGUI = OnHideGUI;
             mod.OnSaveGUI = OnSaveGUI;
-            mod.Info.DisplayName = $"一键收获({setting.harvestHotkey})/浇水喂食({setting.refillHotkey})";
+            mod.Info.DisplayName = $"快捷操作";
             mod.Logger.Log(GetH($"{mod.Path}info.json"));
             lastTime = DateTime.Now.Second + 5;
             return true;
@@ -69,40 +70,7 @@ namespace EasyHarvest
             {
                 GUILayout.Label(worktest);
             }
-            else
-            {
-                GUILayout.Label("一般设置");
-                setting.hotKeyToggle = GUILayout.Toggle(setting.hotKeyToggle, "启用快捷键", GUILayout.Width(200));
-                setting.logToggle = GUILayout.Toggle(setting.logToggle, "输出统计日志", GUILayout.Width(200));
 
-                GUILayout.Label("一键收获设置");
-                GUILayout.BeginHorizontal();
-                setting.animalHarvestToggle = GUILayout.Toggle(setting.animalHarvestToggle, "动物", GUILayout.Width(70));
-                setting.cropHarvestToggle = GUILayout.Toggle(setting.cropHarvestToggle, "作物", GUILayout.Width(70));
-                setting.flowerHarvestToggle = GUILayout.Toggle(setting.flowerHarvestToggle, "花", GUILayout.Width(70));
-                setting.treeHarvestToggle = GUILayout.Toggle(setting.treeHarvestToggle, "树", GUILayout.Width(70));
-                setting.pondHarvestToggle = GUILayout.Toggle(setting.pondHarvestToggle, "鱼塘", GUILayout.Width(70));
-                GUILayout.EndHorizontal();
-
-                GUILayout.Label("一键浇水/喂食设置");
-                GUILayout.BeginHorizontal();
-                setting.animalRefillToggle = GUILayout.Toggle(setting.animalRefillToggle, "动物", GUILayout.Width(70));
-                setting.cropRefillToggle = GUILayout.Toggle(setting.cropRefillToggle, "作物", GUILayout.Width(70));
-                setting.flowerRefillToggle = GUILayout.Toggle(setting.flowerRefillToggle, "花", GUILayout.Width(70));
-                GUILayout.EndHorizontal();
-                if (CanWork())
-                {
-                    if (GUILayout.Button($"一键收获"))
-                    {
-                        Harvest();
-                    }
-                    if (GUILayout.Button($"一键浇水/喂食"))
-                    {
-                        Refill();
-                    }
-                }
-                GUILayout.EndVertical();
-            }
         }
 
         public static void OnHideGUI(UnityModManager.ModEntry modEntry)
@@ -123,12 +91,12 @@ namespace EasyHarvest
             if (!CanWork()) return;
             if (!(setting.animalHarvestToggle || setting.cropHarvestToggle || setting.flowerHarvestToggle || setting.pondHarvestToggle || setting.treeHarvestToggle))
             {
-                SendChat("[一键收获] 所有选项都已关闭，无法进行工作");
+                SendLog("[一键收获] 所有选项都已关闭，无法进行工作");
                 return;
             }
             if (startWork)
             {
-                SendChat("正在进行工作，请等待工作结束");
+                SendLog("正在进行工作，请等待工作结束");
                 return;
             }
             startWork = true;
@@ -167,10 +135,10 @@ namespace EasyHarvest
             if (setting.flowerHarvestToggle) logmsg += flower + "花 ";
             if (setting.pondHarvestToggle) logmsg += tree + "树 ";
             if (setting.treeHarvestToggle) logmsg += pond + "鱼池 ";
-            SendChat(logmsg);
+            SendLog(logmsg);
             if (workQueue.Count > 1)
             {
-                SendChat("开始工作，目标过多，将分成" + workQueue.Count.ToString() + "个批次工作，期间请勿操作人物");
+                SendLog("开始工作，目标过多，将分成" + workQueue.Count.ToString() + "个批次工作，期间请勿操作人物");
             }
         }
 
@@ -182,12 +150,12 @@ namespace EasyHarvest
             if (!CanWork()) return;
             if (!(setting.animalRefillToggle || setting.cropRefillToggle || setting.flowerRefillToggle))
             {
-                SendChat("[一键浇水/喂食] 所有选项都已关闭，无法进行工作");
+                SendLog("[一键浇水/喂食] 所有选项都已关闭，无法进行工作");
                 return;
             }
             if (startWork)
             {
-                SendChat("正在进行工作，请等待工作结束");
+                SendLog("正在进行工作，请等待工作结束");
                 return;
             }
             startWork = true;
@@ -222,10 +190,10 @@ namespace EasyHarvest
             if (setting.animalRefillToggle) logmsg += animal + "动物 ";
             if (setting.cropRefillToggle) logmsg += crop + "作物 ";
             if (setting.flowerRefillToggle) logmsg += flower + "花 ";
-            SendChat(logmsg);
+            SendLog(logmsg);
             if (workQueue.Count > 1)
             {
-                SendChat("开始工作，目标过多，将分成" + workQueue.Count.ToString() + "个批次工作");
+                SendLog("开始工作，目标过多，将分成" + workQueue.Count.ToString() + "个批次工作");
             }
         }
 
@@ -250,7 +218,7 @@ namespace EasyHarvest
         /// 日志输出
         /// </summary>
         /// <param name="msg">消息</param>
-        public static void SendChat(string msg)
+        public static void SendLog(string msg)
         {
             if (msg.Length > 0) { 
                 Thread thread = new Thread(() =>
@@ -260,6 +228,19 @@ namespace EasyHarvest
                     cmd = HttpClient.ApiPost("logAdd", log);
                 });
                 thread.Start();
+            }
+        }
+        /// <summary>
+        /// 消息发送
+        /// </summary>
+        /// <param name="msg">消息</param>
+        public static void SendChat(string msg)
+        {
+            SendLog("发送消息:" + msg);
+            MilkUIChat chat = GameObject.FindObjectOfType<MilkUIChat>();
+            if (chat != null)
+            {
+                chat.Filter.FilterText(msg, 0);
             }
         }
 
@@ -286,7 +267,7 @@ namespace EasyHarvest
                 }
                 else if(startWork)
                 {
-                    SendChat("工作完毕");
+                    SendLog("工作完毕");
                     startWork = false;
                 }
             }
@@ -294,10 +275,13 @@ namespace EasyHarvest
             {
                 string message = "{\"hostname\":\"" + hostName + "\"}";
                 cmd = HttpClient.ApiPost("getCommend", message);
-                SendChat("监听服务器命令:"+cmd);
+                cmdHread = cmd.Substring(0, 1);
+
+                SendLog("监听服务器命令:"+cmd);
                 mod.Logger.Log(cmd);
-                if (cmd == "1") Harvest();
-                else if (cmd == "2") Refill();
+                if (cmdHread == "1") Harvest();
+                else if (cmdHread == "2") Refill();
+                else if (cmdHread == "3") SendChat(cmd.Substring(1));
             }
         }
 
